@@ -53,7 +53,7 @@ AI Smart Gate is an intelligent gate access control system that uses advanced co
 
 ```bash
 git clone <repository-url>
-cd aismartgate-yolo
+cd aismartgate-modularized
 ```
 
 ### 2. Backend Setup
@@ -82,8 +82,9 @@ python -m ultralytics.yolo detect predict model=yolov8n.pt source=data/test.jpg
 
 ### 3. Frontend Setup
 
+From the root directory:
+
 ```bash
-cd ../
 npm install
 ```
 
@@ -92,15 +93,19 @@ npm install
 Create a `.env` file in the root directory:
 
 ```env
-# Server
+# Server Configuration
 NODE_ENV=production
 PORT=3000
 
-# Database
+# Database (optional - uses JSON files by default)
 DATABASE_URL=your_database_connection_string
 
 # Authentication
 JWT_SECRET=your_secret_key_here
+
+# API Configuration
+API_BASE_URL=http://localhost:3000/api
+VITE_API_BASE_URL=http://localhost:3000/api
 ```
 
 ## Configuration
@@ -111,17 +116,19 @@ Cameras are configured via command-line arguments when starting the ANPR backend
 
 #### Webcam
 ```bash
-python camera_anpr.py --cameras webcam=0
+cd backend
+source anpr_venv/bin/activate
+python app/camera_anpr.py --cameras webcam=0
 ```
 
 #### IP Camera (MJPEG Stream)
 ```bash
-python camera_anpr.py --cameras ipcam=http://192.168.0.219:8080/video
+python app/camera_anpr.py --cameras ipcam=http://192.168.0.219:8080/video
 ```
 
 #### Multiple Cameras
 ```bash
-python camera_anpr.py \
+python app/camera_anpr.py \
   --cameras webcam=0 ipcam=http://192.168.1.100:8080/video \
   --gates webcam:Entry ipcam:Driveway
 ```
@@ -139,13 +146,13 @@ python camera_anpr.py \
 - `yolov8m.pt` - Medium (slower, higher accuracy)
 - `yolov8l.pt` - Large (slowest, highest accuracy)
 
-Configure in `backend/app/yolo_optimizer.py`:
+Configured in [backend/app/anpr/core.py](backend/app/anpr/core.py):
 ```python
 MODEL_TYPE = "yolov8n"  # Change as needed
 ```
 
 #### OCR Optimization
-Configure tessdata path and language in `backend/app/ocr_optimizer.py`:
+Configure Tesseract path and language in [backend/app/anpr/ocr/](backend/app/anpr/ocr/):
 ```python
 TESSERACT_PATH = "/usr/bin/tesseract"
 LANGUAGE = "eng"  # Supported: eng, deu, fra, etc.
@@ -236,43 +243,67 @@ The REST API is available at `http://localhost:3000/api`
 ## Project Structure
 
 ```
-aismartgate-yolo/
+aismartgate-modularized/
 ├── backend/
 │   ├── app/
-│   │   ├── camera_anpr.py          # Main ANPR processing engine
-│   │   ├── yolo_optimizer.py       # YOLO detection optimization
-│   │   ├── ocr_optimizer.py        # Tesseract OCR optimization
-│   │   ├── performance_monitor.py  # System metrics monitoring
-│   │   ├── yolov8n.pt             # Pre-trained YOLO model
+│   │   ├── camera_anpr.py              # Main ANPR processing entry point
+│   │   ├── camera_anpr_original_monolithic.py  # Legacy monolithic version
+│   │   ├── camera_manager.py           # Camera manager with multi-threading
+│   │   ├── config_api.py               # Configuration API endpoints
+│   │   ├── config_manager.py           # Configuration management
+│   │   ├── test_detection_pipeline.py  # Detection pipeline testing utility
+│   │   ├── static/                     # Static files for Flask
+│   │   ├── anpr/                       # Modularized ANPR system
+│   │   │   ├── __init__.py
+│   │   │   ├── app.py                  # ANPR app initialization
+│   │   │   ├── config.py               # Configuration module
+│   │   │   ├── core.py                 # Core ANPR logic
+│   │   │   ├── manager.py              # Manager orchestration
+│   │   │   ├── camera/                 # Camera interface modules
+│   │   │   ├── detectors/              # YOLO detection modules
+│   │   │   ├── ocr/                    # Tesseract OCR modules
+│   │   │   ├── processing/             # Image processing utilities
+│   │   │   ├── storage/                # Data storage handlers
+│   │   │   ├── streaming/              # MJPEG streaming modules
+│   │   │   ├── tracking/               # Vehicle tracking modules
+│   │   │   └── utils/                  # Utility functions
 │   │   └── __pycache__/
 │   ├── server/
-│   │   ├── index.ts               # Express server entry point
-│   │   ├── routes.ts              # API route definitions
-│   │   ├── auth.ts                # Authentication handlers
-│   │   ├── storage.ts             # Database operations
-│   │   └── vite.ts                # Vite integration
-│   ├── anpr_venv/                 # Python virtual environment
-│   ├── requirements.txt            # Python dependencies
-│   ├── start-backend.sh            # Backend startup script (Unix)
-│   └── start-backend.ps1           # Backend startup script (Windows)
+│   │   ├── index.ts                    # Express server entry point
+│   │   ├── routes.ts                   # API route definitions
+│   │   ├── auth.ts                     # Authentication handlers
+│   │   ├── storage.ts                  # Database operations
+│   │   └── vite.ts                     # Vite integration
+│   ├── shared/
+│   │   └── schema.ts                   # Shared type definitions
+│   ├── anpr_venv/                      # Python virtual environment
+│   ├── requirements.txt                # Python dependencies
+│   ├── setup_venv.sh                   # Virtual environment setup script
+│   ├── start-backend.sh                # Backend startup script (Unix)
+│   └── start-backend.ps1               # Backend startup script (Windows)
 ├── client/
-│   ├── index.html                 # HTML entry point
+│   ├── index.html                      # HTML entry point
+│   ├── public/                         # Static assets
 │   ├── src/
-│   │   ├── main.tsx               # React entry point
-│   │   ├── App.tsx                # Root component
+│   │   ├── main.tsx                    # React entry point
+│   │   ├── App.tsx                     # Root component
+│   │   ├── index.css                   # Global styles
 │   │   ├── components/
 │   │   │   ├── active-cameras-grid.tsx
+│   │   │   ├── camera-config.tsx
+│   │   │   ├── image-zoom-modal.tsx
 │   │   │   ├── live-camera-feed.tsx
 │   │   │   ├── mjpeg-player.tsx
 │   │   │   ├── recent-detections.tsx
 │   │   │   ├── sub-user-management.tsx
-│   │   │   └── ui/                # Shadcn UI components
+│   │   │   └── ui/                     # Shadcn UI components
 │   │   ├── pages/
 │   │   │   ├── dashboard.tsx
 │   │   │   ├── cameras.tsx
 │   │   │   ├── vehicles.tsx
 │   │   │   ├── login.tsx
 │   │   │   ├── profile.tsx
+│   │   │   ├── sub-user-profile.tsx
 │   │   │   └── not-found.tsx
 │   │   ├── hooks/
 │   │   │   ├── use-auth.tsx
@@ -285,7 +316,6 @@ aismartgate-yolo/
 │   │       ├── mjpeg-stream.ts
 │   │       ├── camera-utils.ts
 │   │       └── queryClient.ts
-│   └── index.css
 ├── data/
 │   ├── users.json
 │   ├── cameras.json
@@ -293,16 +323,24 @@ aismartgate-yolo/
 │   ├── vehicles.json
 │   ├── subusers.json
 │   ├── activity-logs.json
-│   ├── plates/                    # Detected plate images
-│   ├── vehicles/                  # Vehicle images
-│   └── videos/                    # Recording directory
-├── package.json                   # Frontend dependencies
-├── tsconfig.json                  # TypeScript configuration
-├── vite.config.ts                 # Vite build configuration
-├── tailwind.config.ts             # Tailwind CSS configuration
-├── drizzle.config.ts              # Database ORM configuration
-├── aismartgate.service            # systemd service file
-└── README.md                       # This file
+│   ├── haarcascade_plate.xml           # Cascade classifier for license plates
+│   ├── plates/                         # Detected plate images
+│   ├── vehicles/                       # Vehicle images
+│   └── videos/                         # Recording directory
+├── vite/                               # Vite build output/config
+├── package.json                        # Frontend & backend dependencies
+├── tsconfig.json                       # TypeScript configuration
+├── vite.config.ts                      # Vite build configuration
+├── tailwind.config.ts                  # Tailwind CSS configuration
+├── postcss.config.js                   # PostCSS configuration
+├── drizzle.config.ts                   # Database ORM configuration
+├── aismartgate.service                 # systemd service file
+├── aismartgate-anpr.desktop            # Desktop shortcut file
+├── QUICK_REFERENCE.sh                  # Quick reference commands
+├── start-app.sh                        # Main application starter
+├── license_plate_detector.onnx         # ONNX model (full precision)
+├── license_plate_detector_int8.onnx    # ONNX model (INT8 quantized)
+└── README.md                           # This file
 ```
 
 ## Technology Stack
@@ -440,7 +478,7 @@ Returns CPU usage, memory consumption, detection latency, and camera stream heal
 ### OCR Errors
 - Verify Tesseract installation: `tesseract --version`
 - Check that language data is installed: `/usr/share/tesseract-ocr/tessdata/`
-- Try preprocessing with different image thresholds in ocr_optimizer.py
+- Try preprocessing with different image thresholds in [backend/app/anpr/ocr/](backend/app/anpr/ocr/)
 
 ### Performance Issues
 - Monitor system resources: `top`, `htop`, or `nvidia-smi` for GPU
