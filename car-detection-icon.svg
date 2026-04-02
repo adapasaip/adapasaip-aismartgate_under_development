@@ -1,0 +1,38 @@
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="128" cy="128" r="120" fill="#1e3a8a" opacity="0.1"/>
+  <circle cx="128" cy="128" r="115" fill="none" stroke="#1e3a8a" stroke-width="2"/>
+  
+  <!-- Gate posts (left and right) -->
+  <rect x="45" y="70" width="15" height="100" fill="#1e3a8a" rx="2"/>
+  <rect x="196" y="70" width="15" height="100" fill="#1e3a8a" rx="2"/>
+  
+  <!-- Gate top bar -->
+  <rect x="45" y="65" width="166" height="12" fill="#2563eb" rx="2"/>
+  
+  <!-- License plate -->
+  <rect x="60" y="95" width="136" height="60" fill="#ffed4e" stroke="#1e3a8a" stroke-width="2" rx="3"/>
+  
+  <!-- License plate security band -->
+  <rect x="60" y="95" width="20" height="60" fill="#1e3a8a" rx="3"/>
+  <text x="70" y="130" font-size="12" font-weight="bold" fill="#ffed4e" text-anchor="middle">IN</text>
+  
+  <!-- License plate text -->
+  <text x="140" y="120" font-size="22" font-weight="bold" fill="#1e3a8a" text-anchor="middle" font-family="monospace">AI-GATE</text>
+  <text x="140" y="145" font-size="10" fill="#1e3a8a" text-anchor="middle" font-family="monospace">SMART</text>
+  
+  <!-- Scanning lines (representing ANPR technology) -->
+  <line x1="50" y1="170" x2="206" y2="170" stroke="#2563eb" stroke-width="1.5" opacity="0.6"/>
+  <line x1="50" y1="175" x2="206" y2="175" stroke="#2563eb" stroke-width="1.5" opacity="0.4"/>
+  <line x1="50" y1="180" x2="206" y2="180" stroke="#2563eb" stroke-width="1" opacity="0.2"/>
+  
+  <!-- Camera indicator (circle with dot) -->
+  <circle cx="220" cy="85" r="12" fill="none" stroke="#2563eb" stroke-width="2"/>
+  <circle cx="220" cy="85" r="5" fill="#ef4444"/>
+  
+  <!-- Brand text below -->
+  <text x="128" y="215" font-size="14" font-weight="bold" fill="#1e3a8a" text-anchor="middle" font-family="Arial, sans-serif">AISmartGate ANPR</text>
+  
+  <!-- Tagline -->
+  <text x="128" y="235" font-size="9" fill="#2563eb" text-anchor="middle" font-family="Arial, sans-serif" opacity="0.8">Automatic Plate Recognition</text>
+</svg>

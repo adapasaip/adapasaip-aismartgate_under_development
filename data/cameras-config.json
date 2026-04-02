@@ -1,0 +1,42 @@
+{
+  "cameras": [
+    {
+      "id": "051633ef-1814-4e11-aa92-f2d372f09228",
+      "name": "Entry Camera",
+      "source": "http://192.168.0.219:8080/video",
+      "type": "ipwebcam",
+      "enabled": true,
+      "description": "",
+      "createdAt": "2026-03-28T16:43:18.542399",
+      "userId": "fa726c6b-0ccc-4c51-8658-36bd8f261cc3",
+      "location": "Main Entrance",
+      "gate": "Entry",
+      "resolution": "1280x720",
+      "fps": 30,
+      "anprEnabled": true
+    },
+    {
+      "id": "17b93f45-5656-4d5e-91d6-8f4dcb21cd54",
+      "name": "Exit Cam",
+      "source": "0",
+      "type": "usb",
+      "enabled": true,
+      "description": "",
+      "createdAt": "2026-03-28T16:43:53.914780",
+      "userId": "fa726c6b-0ccc-4c51-8658-36bd8f261cc3",
+      "location": "Main Entrance",
+      "gate": "Exit",
+      "resolution": "1280x720",
+      "fps": 30,
+      "anprEnabled": true
+    }
+  ],
+  "gates": [],
+  "settings": {
+    "autoStartBackend": true,
+    "autoStartFrontend": true,
+    "backendPort": 8000,
+    "frontendPort": 5000,
+    "detectionsLogPath": "./data/detections.json"
+  }
+}

@@ -1,0 +1,21 @@
+"""Constants for ANPR system"""
+
+# Detection thresholds
+YOLO_CONFIDENCE_THRESHOLD = 0.5
+
+# OCR thresholds 
+OCR_CONFIDENCE_THRESHOLD = 0.6
+
+# Tracking parameters
+TRACKING_MAX_DISTANCE = 150
+TRACKING_MAX_DISAPPEARED = 30
+
+# Frame processing
+FRAME_WIDTH = 960
+FRAME_HEIGHT = 540
+DETECTION_WIDTH = 320
+DETECTION_HEIGHT = 320
+
+# Plate validation
+MIN_PLATE_LENGTH = 4
+MAX_PLATE_LENGTH = 20

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "fa726c6b-0ccc-4c51-8658-36bd8f261cc3",
+    "mobile": "1234567890",
+    "password": "$2a$10$urghUeOWEH6IMqm3/d1HRO3OR8WnrJiMmM9el7CMk73YwcJjoVKeO",
+    "fullName": "Admin User",
+    "email": "admin@aismartgate.com",
+    "role": "admin",
+    "isActive": true,
+    "createdAt": "2025-12-11T13:56:50.976Z",
+    "lastLogin": "2026-03-30T06:25:10.587Z"
+  }
+]

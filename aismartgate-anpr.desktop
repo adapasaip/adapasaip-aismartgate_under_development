@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=AI SmartGate ANPR
+Comment=Automatic Number Plate Recognition System
+Exec=/home/sairaspi/Desktop/smartgate-ver0/GIT+OAK/adapasaip-aismartgate_under_development/start-app.sh
+Icon=/home/sairaspi/Desktop/smartgate-ver0/GIT+OAK/adapasaip-aismartgate_under_development/car-detection-icon.svg
+Terminal=true
+Categories=Utility;Application;
+StartupNotify=true
+Path=/home/sairaspi/Desktop/smartgate-ver0/GIT+OAK/adapasaip-aismartgate_under_development
